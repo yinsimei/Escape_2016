@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 
 public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
@@ -21,7 +20,7 @@ public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
     {
         if (m_canvasGroup.alpha != 0f)
         {
-            Debug.Log("The canvas group is not hidden");
+            Debug.LogError("The canvas group is not hidden");
         }
 
         Animator CanvasAnimator = this.gameObject.GetComponent<Animator>();
@@ -33,7 +32,7 @@ public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
     {
         if (m_canvasGroup.alpha != 1f)
         {
-            Debug.Log("The canvas group is not shown");
+            Debug.LogError("The canvas group is not shown");
         }
 
         Animator CanvasAnimator = this.gameObject.GetComponent<Animator>();

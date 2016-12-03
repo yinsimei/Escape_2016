@@ -1,52 +1,86 @@
 ﻿using System;
 using UnityEngine;
-using PixelCrushers.DialogueSystem;
 using System.Collections;
+using UnityEngine.Assertions;
 
 public class SetEnabledOnEvents : MonoBehaviour {
 
-    public MonoBehaviour[] UIBehaviors;
-    public MonoBehaviour[] playerBehaviors;
+    public MonoBehaviour[] UIBehaviors;           // Icon button behavoirs
+    public MonoBehaviour[] playerBehaviors;      // Player behaviors : raycast, mouselook, keyboard behaviors for UI, ...
 
-    private bool m_OnDialogue;  // When Dialogue, freeze all else
-    private bool m_OnUI;        // When UI, don't freeze Dialogue
+    private bool m_bDialogue;  // When Dialogue, freeze all else
+    private bool m_bUI;        // When UI, don't freeze Dialogue
     
     void Start ()
     {
-        m_OnDialogue = false;
-        m_OnUI = false;
+        m_bDialogue = false;
+        m_bUI = false;
     }
 
     public void OnConversationStart(Transform actor)
     {
-        m_OnDialogue = true;
+        Assert.IsFalse(m_bUI);
+        m_bDialogue = true;
         SetPlayerBehaviors(false);
         SetUIBehaviors(false);
     }
 
     public void OnConversationEnd(Transform actor)
     {
-        m_OnDialogue = false;
-        if (!m_OnUI)
-        {
-            SetPlayerBehaviors(true);
-        }
+        m_bDialogue = false;
+        SetPlayerBehaviors(true);
+        SetUIBehaviors(true);
     }
 
     public void OnUIShow()
     {
-        m_OnUI = true;
+        if (m_bUI)
+            return;
+
+        Assert.IsFalse(m_bDialogue);
+
+        m_bUI = true;
         SetPlayerBehaviors(false);
-        SetUIBehaviors(false);
     }
 
     public void OnUIHide()
     {
-        m_OnUI = false;
-        if (!m_OnDialogue)
+        Assert.IsTrue(m_bUI, "Get multiple times of UI Hide messages");
+        m_bUI = false;
+        if (!m_bDialogue)
         {
             SetPlayerBehaviors(true);
         }
+    }
+
+    public void OnInventoryShow()
+    {
+        Assert.IsFalse(m_bUI, "Inventory can't be called when UI is on");
+        Assert.IsFalse(m_bDialogue, "Inventory can't be call when dialogue is on");
+
+        SetPlayerBehaviors(false);
+        SetUIBehaviors(false);
+    }
+
+    public void OnInventoryHide()
+    {
+        SetPlayerBehaviors(true);
+        SetUIBehaviors(true);
+    }
+
+    public void OnPuzzleStart()
+    {
+        Assert.IsFalse(m_bUI, "Puzzle can't be called when UI is on");
+        Assert.IsFalse(m_bDialogue, "Puzzle can't be call when dialogue is on");
+
+        SetPlayerBehaviors(false);
+        SetUIBehaviors(false);
+    }
+
+    public void OnPuzzleEnd()
+    {
+        SetPlayerBehaviors(true);
+        SetUIBehaviors(true);
     }
 
     private void SetPlayerBehaviors(bool enabled)
@@ -59,9 +93,9 @@ public class SetEnabledOnEvents : MonoBehaviour {
 
     private void SetUIBehaviors(bool enabled)
     {
-        foreach (MonoBehaviour m in UIBehaviors)
+        foreach (MonoBehaviour i in UIBehaviors)
         {
-            m.enabled = enabled;
+            i.enabled = enabled;
         }
     }
 }

@@ -1,9 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using PixelCrushers.DialogueSystem;
 
 public class CollectableObjectParent : RaycastReceiverParent
 {
-    public bool isCollectable = true;
-    public string collectCoversation;
-    public InventoryItem related2DItem;
+    override public void ClickActionParent()
+    {
+        CollectAction collectAction = transform.GetComponent<CollectAction>();
+        if (collectAction != null)
+        {
+            StartCoroutine(collectAction.StartAction());
+        }
+    }
 }

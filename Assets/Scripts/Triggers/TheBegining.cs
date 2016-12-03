@@ -15,12 +15,6 @@ public class TheBegining : MonoBehaviour {
             Animator blackMaskAnimator = BlackInMask.GetComponent<Animator>();
             blackMaskAnimator.Play("BlackIn");
 
-            //do
-            //{
-            //    yield return null;
-            //}
-            //while (blackMaskAnimator.GetCurrentAnimatorStateInfo(0).IsName("BlackIn"));
-
             Animation anim = other.transform.GetComponent<Animation>();
             anim.Play("TheBeginning_GetUp");
             do

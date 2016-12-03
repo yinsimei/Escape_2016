@@ -1,12 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.Assertions;
 
 public class CraftingPanel : MonoBehaviour
 {
-    public Crafting crafting;
-    public Inventory inventory;
+    private Crafting m_crafting;
+    private Inventory m_inventory;
 
     private bool isShowing = false;
+
+    void Start()
+    {
+        m_crafting = transform.GetComponentInChildren<Crafting>();
+        m_inventory = transform.GetComponentInChildren<Inventory>();
+        Assert.IsNotNull(m_crafting);
+        Assert.IsNotNull(m_inventory);
+    }
 
     public void Show()
     {
@@ -15,7 +23,8 @@ public class CraftingPanel : MonoBehaviour
 
         isShowing = true;
         // Run show animation
-        transform.GetComponent<Animator>().Play("InventoryPanel_Show");
+        m_crafting.Show();
+        m_inventory.Show();
     }
 
     public void Hide()
@@ -25,7 +34,8 @@ public class CraftingPanel : MonoBehaviour
 
         isShowing = false;
         // Run hide animation
-        transform.GetComponent<Animator>().Play("InventoryPanel_Hide");
+        m_crafting.Hide();
+        m_inventory.Hide();
 
         // Reset Panel
     }

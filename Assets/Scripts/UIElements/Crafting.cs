@@ -11,4 +11,14 @@ public class Crafting : MonoBehaviour {
         Assert.IsNotNull(ObjectOnPanel);
         Assert.IsNotNull(HiddenObject);
     }
+
+    public void Show()
+    {
+        GetComponent<Animator>().Play("Show");
+    }
+
+    public void Hide()
+    {
+        GetComponent<Animator>().Play("Hide");
+    }
 }

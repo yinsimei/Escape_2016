@@ -63,11 +63,13 @@ public class InventoryItem : MonoBehaviour
         SetItemParent(m_inventory.invisibleRoot);
         for (int i = m_nNumInInventory; i < m_inventory.m_nItemNb - 1; ++i)
         {
-            Assert.AreEqual(m_inventory.inventoryCells.GetChild(i).childCount, 0);
-            m_inventory.inventoryCells.GetChild(i + 1).transform.
-                GetComponent<InventoryItem>().SetItemParent(
-                m_inventory.inventoryCells.GetChild(i).transform
-                );
+            
+            Transform cellToFill = m_inventory.inventoryCells.GetChild(i);
+            Transform nextCell = m_inventory.inventoryCells.GetChild(i + 1);
+            Assert.AreEqual(cellToFill.childCount, 0);
+            Assert.AreEqual(nextCell.childCount, 1);
+
+            nextCell.GetComponentInChildren<InventoryItem>().SetItemParent(cellToFill);
         }
 
         --m_inventory.m_nItemNb;

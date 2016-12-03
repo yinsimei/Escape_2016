@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Assertions;
 
 // This is the class for the puzzle in 3D
 public class Puzzle3D : RaycastReceiver
 {
-    public GameObject puzzle;
+    public Puzzle puzzle;
+
+    protected override void Start()
+    {
+        base.Start();
+        Assert.IsNotNull(puzzle);
+    }
 
     override public bool isInteractable()
     {
@@ -14,12 +21,10 @@ public class Puzzle3D : RaycastReceiver
     override public void ClickAction()
     {
         base.ClickAction();
-
-        Puzzle p = puzzle.GetComponent<Puzzle>();
-        if (!p.m_bPuzzleSolved)
+        if (!puzzle.m_bPuzzleSolved)
         {
             // Show puzzle2D
-            p.StartPuzzle();
+            puzzle.StartPuzzle();
         }
     }
 }

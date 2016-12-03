@@ -19,7 +19,7 @@ public class RaycastReceiverParent : MonoBehaviour
         }
     }
 
-    public void ClickActionParent()
+    virtual public void ClickActionParent()
     {
         foreach (RaycastReceiver receiver in transform.GetComponentsInChildren<RaycastReceiver>())
         {

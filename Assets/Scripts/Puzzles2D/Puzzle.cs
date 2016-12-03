@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.Assertions;
 
 public class Puzzle : MonoBehaviour {
 
-    public InteractiveObject[] objectsToUnlock;
+    public string endAnimationTrigger = "End";
+    public UnlockAction[] unlockActions;
 
     [HideInInspector]
     public bool m_bPuzzleSolved = false;
-    public bool m_bPuzzleEnabled;
 
     // Use this for initialization
     virtual protected void Start ()
     {
-        // Hide puzzle
-        EnablePuzzle(false);
+        // Unset this to current puzzle
+        SetCurrentPuzzle(false);
 	}
 
     // Update is called once per frame
@@ -22,20 +23,24 @@ public class Puzzle : MonoBehaviour {
 
 	}
 
-    virtual protected void UnlockDoors()
+    // Unlock objects by solving this puzzle
+    private void UnlockObjects()
     {
-        foreach (InteractiveObject obj in objectsToUnlock)
+        foreach (UnlockAction unlock in unlockActions)
         {
-            obj.locked = false;
+            unlock.Unlock();
         }
     }
 
+    // Start Puzzle : Show puzzle panel & set this puzzle to current puzzle
     virtual public void StartPuzzle()
     {
         // Broadcast
-        DialogueManager.Instance.gameObject.BroadcastMessage("OnUIShow", gameObject, SendMessageOptions.DontRequireReceiver);
+        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleStart", gameObject, SendMessageOptions.DontRequireReceiver);
+        // Show puzzle panel
         transform.GetComponentInParent<PuzzlesPanel>().BeginFadeIn();
-        EnablePuzzle(true);
+        // Set this puzzle to current puzzle
+        SetCurrentPuzzle(true);
     }
 
     // End Puzzle : Congratulations and move to next step
@@ -45,41 +50,55 @@ public class Puzzle : MonoBehaviour {
 
         if (p_Win)
         {
-            // Congratulations
-            DialogueManager.ShowAlert("Puzzle résolu");
-
-
-            // Trigger next event
-            UnlockDoors();
-        }
-
-        // Hide Game board
-        transform.GetComponentInParent<PuzzlesPanel>().BeginFadeOut();
-        EnablePuzzle(false);
-
-        // Broadcast
-        DialogueManager.Instance.gameObject.BroadcastMessage("OnUIHide", gameObject, SendMessageOptions.DontRequireReceiver);
-    }
-
-    // Check if Puzzle Complete
-    virtual protected bool CheckPuzzleComplete()
-    {
-        return false;
-    }
-
-    // Enable/Disable puzzle
-    virtual public void EnablePuzzle(bool enabled)
-    {
-        m_bPuzzleEnabled = enabled;
-        GetComponent<CanvasGroup>().blocksRaycasts = enabled;
-        if (enabled)
-        {
-            GetComponent<CanvasGroup>().alpha = 1f;
+            StartCoroutine(EndPuzzleAnimation());
         }
         else
         {
-            GetComponent<CanvasGroup>().alpha = 0f;
+            HidePuzzle();
         }
-        
+}
+
+    // Play end animation
+    private IEnumerator EndPuzzleAnimation()
+    {
+        Animator animator = GetComponent<Animator>();
+       
+        if (animator != null)
+        {
+            animator.SetTrigger(endAnimationTrigger);
+
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        }
+
+        // Congratulations
+        DialogueManager.ShowAlert("Puzzle résolu");
+
+        // Trigger next event
+        UnlockObjects();
+
+        // Hide puzzle
+        HidePuzzle();
+    }
+
+    // Hide puzzle
+    private void HidePuzzle()
+    {
+        // Hide Game board
+        transform.GetComponentInParent<PuzzlesPanel>().BeginFadeOut();
+        SetCurrentPuzzle(false);
+
+        // Broadcast
+        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleEnd", gameObject, SendMessageOptions.DontRequireReceiver);
+    }
+
+    // Set this puzzle to current puzzle on panel
+    private void SetCurrentPuzzle(bool enabled)
+    {
+        GetComponent<CanvasGroup>().blocksRaycasts = enabled;
+        GetComponent<CanvasGroup>().interactable = enabled;
+        if (enabled)
+            GetComponent<CanvasGroup>().alpha = 1f;
+        else
+            GetComponent<CanvasGroup>().alpha = 0f;
     }
 }
