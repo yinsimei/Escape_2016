@@ -12,9 +12,11 @@ public class TheBegining : MonoBehaviour {
         {
             DialogueManager.Instance.gameObject.BroadcastMessage("OnConversationStart", this.transform);
 
+            // Animation black in
             Animator blackMaskAnimator = BlackInMask.GetComponent<Animator>();
             blackMaskAnimator.Play("BlackIn");
 
+            // Animation turn camera
             Animation anim = other.transform.GetComponent<Animation>();
             anim.Play("TheBeginning_GetUp");
             do
