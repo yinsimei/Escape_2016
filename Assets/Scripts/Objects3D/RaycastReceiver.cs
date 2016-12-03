@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Assertions;
+using System.Collections.Generic;
 
 public class RaycastReceiver : MonoBehaviour {
     [Serializable]
@@ -26,15 +27,27 @@ public class RaycastReceiver : MonoBehaviour {
     public RaycastReceiverParent receiverParent = null;
 
     private EHighlightState m_highlightState = EHighlightState.None;
-    private Material m_material;
-    private Color m_initialEmissionColor;
 
+    private struct SMaterialInfo
+    {
+        public Material m_material;
+        public Color m_initialEmissionColor;
+
+        public SMaterialInfo(Material p_material)
+        {
+            m_material = p_material;
+            m_initialEmissionColor = m_material.GetColor("_EmissionColor");
+        }
+    }
+    private List<SMaterialInfo> m_materialInfos = new List<SMaterialInfo>();
     // Use this for initialization
     virtual protected void Start ()
     {
-        Assert.IsNotNull(GetComponent<Collider>());
-        m_material = GetComponent<Renderer>().material;
-        m_initialEmissionColor = m_material.GetColor("_EmissionColor");
+        Assert.IsNotNull(GetComponent<Collider>(), "The raycast receiver should have a collider!");
+        foreach (Material m in GetComponent<Renderer>().materials)
+        {
+            m_materialInfos.Add(new SMaterialInfo(m));
+        }
 
         m_highlightState = EHighlightState.None;
 
@@ -53,7 +66,10 @@ public class RaycastReceiver : MonoBehaviour {
         {
             case EHighlightState.None:
                 {
-                    m_material.SetColor("_EmissionColor", m_initialEmissionColor);
+                    foreach (SMaterialInfo sm in m_materialInfos)
+                    {
+                        sm.m_material.SetColor("_EmissionColor", sm.m_initialEmissionColor);
+                    }  
                 }
                 break;
 
@@ -62,7 +78,10 @@ public class RaycastReceiver : MonoBehaviour {
                     if (m_highlightState == EHighlightState.None)
                     {
                         Color emissionColor = Color.grey * Mathf.LinearToGammaSpace(lightness);
-                        m_material.SetColor("_EmissionColor", emissionColor);
+                        foreach (SMaterialInfo sm in m_materialInfos)
+                        {
+                            sm.m_material.SetColor("_EmissionColor", emissionColor);
+                        }
                     }
                 }
                 break;
@@ -113,7 +132,10 @@ public class RaycastReceiver : MonoBehaviour {
             Color baseColor = Color.grey;
             Color finalColor = baseColor * Mathf.LinearToGammaSpace(emission * blinkSpeed * lightness * 0.8f + lightness * 0.2f);
 
-            m_material.SetColor("_EmissionColor", finalColor);
+            foreach (SMaterialInfo sm in m_materialInfos)
+            {
+                sm.m_material.SetColor("_EmissionColor", finalColor);
+            }
         }
     }
 }
