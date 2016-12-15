@@ -1,14 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.Assertions;
 
 public class IconActions : MonoBehaviour {
 
-    public float transitionTime;
-    public CraftingPanel inventoryPanel;
-    public GameObject DocumentPanel;
+    public static IconActions instance;
 
-	void Start () {
+    public float transitionTime;
+    public CraftingSystem craftingSystem;
+    public DocumentsSystem documentSystem;
+
+    [HideInInspector]
+    public bool m_bShown = false;
+
+	void Start ()
+    {
+        // Singleton
+        Assert.IsNull(instance);
+        instance = this;
+
         // Hide all icons but List
         for (int i = 0; i < transform.childCount; ++i)
         {
@@ -36,10 +47,15 @@ public class IconActions : MonoBehaviour {
                 Debug.LogError("Icon " + icon.name + " unknown");
             }
         }
-	}
+
+        m_bShown = false;
+    }
 
     public void ClickList()
     {
+        Assert.IsFalse(m_bShown);
+        m_bShown = true;
+
         for (int i = 0; i < transform.childCount; ++i)
         {
             Transform icon = transform.GetChild(i);
@@ -64,6 +80,9 @@ public class IconActions : MonoBehaviour {
 
     public void ClickClose()
     {
+        Assert.IsTrue(m_bShown);
+        m_bShown = false;
+
         // Hide Icons
         for (int i = 0; i < transform.childCount; ++i)
         {
@@ -83,8 +102,11 @@ public class IconActions : MonoBehaviour {
             }
         }
 
-        // Hide inventory panel
-        inventoryPanel.Hide();
+        // Hide crafting panel
+        craftingSystem.Hide();
+
+        // Hide document panel
+        documentSystem.Hide();
 
         // Broadcast
         DialogueManager.Instance.gameObject.BroadcastMessage("OnUIHide", gameObject, SendMessageOptions.DontRequireReceiver);
@@ -92,14 +114,20 @@ public class IconActions : MonoBehaviour {
 
     public void ClickInventory()
     {
-        // Show inventory panel
-        inventoryPanel.Show();
+        // Hide document panel
+        documentSystem.Hide();
+
+        // Show crafting panel
+        craftingSystem.Show();
     }
 
     public void ClickDocs()
     {
         // Hide inventory panel
-        inventoryPanel.Hide();
+        craftingSystem.Hide();
+
+        // Show Document system
+        documentSystem.Show();
     }
 
     public void ClickMenu()
@@ -115,13 +143,13 @@ public class IconActions : MonoBehaviour {
         {
             if (canvasGroupIcon.alpha != 0f)
                 Debug.LogError("Icon " + icon.name + " already shown");
-            animatorIcon.Play("Show", 0, transitionTime);
+            animatorIcon.SetTrigger("Show");
         }
         else
         {
             if (canvasGroupIcon.alpha != 1f)
                 Debug.LogError("Icon " + icon.name + " already hidden");
-            animatorIcon.Play("Hide", 0, transitionTime);
+            animatorIcon.SetTrigger("Hide");
         }
     }
 }

@@ -9,7 +9,7 @@ public class CollectableObjectParent : RaycastReceiverParent
         CollectAction collectAction = transform.GetComponent<CollectAction>();
         if (collectAction != null)
         {
-            StartCoroutine(collectAction.StartAction());
+            collectAction.StartAction();
         }
     }
 }

@@ -8,8 +8,12 @@ public class UnlockAction : MonoBehaviour
     public bool isLocked = true;
     public string conversationWhenLocked;
     public InventoryItem unlockItem;
+    public string dialogueVar;
 
     private Inventory m_inventory;
+
+    [HideInInspector]
+    public Puzzle3D m_lockedByPuzzle;
 
     void Start()
     {
@@ -17,12 +21,20 @@ public class UnlockAction : MonoBehaviour
         Assert.IsNotNull(m_inventory);
     }
 
-    public IEnumerator StartAction()
+    public void StartAction()
+    {
+        StartCoroutine(Action());
+    }
+
+    private IEnumerator Action()
     {
         if (!string.IsNullOrEmpty(conversationWhenLocked))
         {
             // Say object locked
             DialogueManager.StartConversation(conversationWhenLocked);
+
+            if (m_lockedByPuzzle != null)
+                m_lockedByPuzzle.StartHighlight();
         }
 
         do
@@ -30,9 +42,17 @@ public class UnlockAction : MonoBehaviour
             yield return null;
         } while (DialogueManager.IsConversationActive);
 
+        if (m_lockedByPuzzle != null)
+        {
+            m_lockedByPuzzle.EndHighlight();
+        }
+
         if (unlockItem != null)
         {
-            m_inventory.ShowItems(this);
+            if (string.IsNullOrEmpty(dialogueVar ) || DialogueLua.GetVariable(dialogueVar).AsBool)
+            {
+                m_inventory.ShowInventory(this);
+            }
         }
     }
 

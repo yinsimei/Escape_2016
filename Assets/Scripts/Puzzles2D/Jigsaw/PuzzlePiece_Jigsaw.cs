@@ -37,6 +37,7 @@ public class PuzzlePiece_Jigsaw : MonoBehaviour, IBeginDragHandler, IEndDragHand
             return;
         }
 
+        // This has been commented because setted in the inspector
         // Set Anchor to Center
         //gameObject.GetComponent<RectTransform>().anchorMin = new Vector2(0.5f, 0.5f);
         //gameObject.GetComponent<RectTransform>().anchorMax = new Vector2(0.5f, 0.5f);
@@ -71,7 +72,10 @@ public class PuzzlePiece_Jigsaw : MonoBehaviour, IBeginDragHandler, IEndDragHand
     // ---------------------------------------------------
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // set statistic object to this
         ms_PuzzleBeingDraged = gameObject;
+
+        // Set blocksRaycasts to false, else it won't work for drop event
         GetComponent<CanvasGroup>().blocksRaycasts = false;
     }
 
@@ -105,8 +109,8 @@ public class PuzzlePiece_Jigsaw : MonoBehaviour, IBeginDragHandler, IEndDragHand
     public void OnEndDrag(PointerEventData eventData)
     {
         // Reset values for next drag
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
         ms_PuzzleBeingDraged = null;
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         // Reset position
         gameObject.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;

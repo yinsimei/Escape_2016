@@ -8,6 +8,7 @@ public class Puzzle_Digicode : Puzzle
     public int correctCode;
     public Text[] codeInputs;
     public Digicode_signal[] codeSignals;
+    public GameObject[] digiKeys;
 
     private const int SIZE = 6;
     private const int RANGE = 10;
@@ -17,21 +18,9 @@ public class Puzzle_Digicode : Puzzle
     private int[] m_pnCodeInputs = new int[SIZE];
     private int m_nCodeInputsNb = 0;
 
-    private struct SResultEvaluation
-    {
-        public int m_nExactCodeNb;
-        public int m_nRightCodeNb;
-        public int m_nValueRightCodeNb { get { return (m_nRightCodeNb - m_nExactCodeNb); } }
-        public int m_nWrongCodeNb { get { return (SIZE - m_nRightCodeNb); } }
-        public bool m_bValidResult { get { return (m_nExactCodeNb == SIZE); } }
-
-        public void Reset()
-        {
-            m_nExactCodeNb = 0;
-            m_nRightCodeNb = 0;
-        }
-    }
-    private SResultEvaluation m_sResult;
+    // Result Evaluation
+    private Digicode_signal.EDigiCodeSignal[] m_pResultEvaluation = new Digicode_signal.EDigiCodeSignal[SIZE];
+    private bool m_bResultValid;
 
     // Use this for initialization
     override protected void Start()
@@ -55,11 +44,13 @@ public class Puzzle_Digicode : Puzzle
             ++m_pCodeNumOccurrence[code];
         }
 
+        // Commented here because we don't need this fonction now
         // Erase frequently used keys in pad
-        for (int i = 0; i < RANGE; ++i)
-        {
-
-        }
+        //for (int i = 0; i < RANGE; ++i)
+        //{
+        //    digiKeys[i].transform.GetChild(0).GetComponent<Text>().color = 
+        //        (m_pCodeNumOccurrence[i] > 0) ? new Color(0f, 0f, 0f, 0.35f) : Color.black;
+        //}
     }
 
     public override void StartPuzzle()
@@ -78,10 +69,15 @@ public class Puzzle_Digicode : Puzzle
             m_pnCodeInputs[i] = -1;
             // reset input field
             codeInputs[i].text = "";
+
             // reset signal color
             codeSignals[i].SetSignal(Digicode_signal.EDigiCodeSignal.Wrong);
+
+            // reset result evaluation
+            m_pResultEvaluation[i] = Digicode_signal.EDigiCodeSignal.Wrong;
+            m_bResultValid = false;
         }
-        m_sResult.Reset();
+        
     }
 
     // Input functoin for button click
@@ -114,41 +110,44 @@ public class Puzzle_Digicode : Puzzle
         int[] pOccurrence = new int[RANGE];
         System.Array.Copy(m_pCodeNumOccurrence, pOccurrence, RANGE);
 
+        m_bResultValid = true;
         for (int i = 0; i < SIZE; ++i)
         {
             if (m_pnCodeInputs[i] == m_pnCorrectCode[i])
-                ++m_sResult.m_nExactCodeNb;
-
-            if (pOccurrence[m_pnCodeInputs[i]] > 0)
             {
+                m_pResultEvaluation[i] = Digicode_signal.EDigiCodeSignal.Exact;
                 --pOccurrence[m_pnCodeInputs[i]];
-                ++m_sResult.m_nRightCodeNb;
+            }
+            else
+                m_bResultValid = false;
+        }
+
+        if (!m_bResultValid)
+        {
+            for (int i = 0; i < SIZE; ++i)
+            {
+                if (m_pnCodeInputs[i] == m_pnCorrectCode[i])
+                    continue;
+
+                if (pOccurrence[m_pnCodeInputs[i]] > 0)
+                {
+                    m_pResultEvaluation[i] = Digicode_signal.EDigiCodeSignal.ValueRight;
+                    --pOccurrence[m_pnCodeInputs[i]];
+                }
+                else
+                {
+                    m_pResultEvaluation[i] = Digicode_signal.EDigiCodeSignal.Wrong;
+                }
             }
         }
 
         // Update Display
-        int k = 0;
-        for (int i = 0; i < m_sResult.m_nWrongCodeNb; ++i)
+        for (int i = 0; i < SIZE; ++i)
         {
-            codeSignals[k].SetSignal(Digicode_signal.EDigiCodeSignal.Wrong);
-            ++k;
+            codeSignals[i].SetSignal(m_pResultEvaluation[i]);
         }
 
-        for (int i = 0; i < m_sResult.m_nValueRightCodeNb; ++i)
-        {
-            codeSignals[k].SetSignal(Digicode_signal.EDigiCodeSignal.ValueRight);
-            ++k;
-        }
-
-        for (int i = 0; i < m_sResult.m_nExactCodeNb; ++i)
-        {
-            codeSignals[k].SetSignal(Digicode_signal.EDigiCodeSignal.Exact);
-            ++k;
-        }
-
-        Assert.AreEqual(k, SIZE);
-
-        if (m_sResult.m_bValidResult)
+        if (m_bResultValid)
         {
             EndPuzzle(true);
         }

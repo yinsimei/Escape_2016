@@ -11,6 +11,12 @@ public class Puzzle3D : RaycastReceiver
     {
         base.Start();
         Assert.IsNotNull(puzzle);
+
+        // Set puzzle 3D to unlock action for hightlight
+        foreach (UnlockAction a in puzzle.unlockActions)
+        {
+            a.m_lockedByPuzzle = this;
+        }
     }
 
     override public bool isInteractable()
@@ -26,5 +32,15 @@ public class Puzzle3D : RaycastReceiver
             // Show puzzle2D
             puzzle.StartPuzzle();
         }
+    }
+
+    public void StartHighlight()
+    {
+        SetHighlightState(EHighlightState.CallAttention);
+    }
+
+    public void EndHighlight()
+    {
+        SetHighlightState(EHighlightState.None);
     }
 }

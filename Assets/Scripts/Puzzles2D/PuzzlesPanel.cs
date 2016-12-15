@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Assertions;
 
 public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
 {
+    public static PuzzlesPanel instance;
+
     public float FadeInTime = 0.25f;
     public float FadeOutTime = 0.25f;
     private CanvasGroup m_canvasGroup;
@@ -10,6 +13,11 @@ public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
     // Use this for initialization
     void Start()
     {
+        // Singleton
+        Assert.IsNull(instance);
+        instance = this;
+
+        // Init canvas grôup
         m_canvasGroup = transform.GetComponent<CanvasGroup>();
         m_canvasGroup.alpha = 0f;
         m_canvasGroup.blocksRaycasts = false;
@@ -41,6 +49,11 @@ public class PuzzlesPanel : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        transform.GetComponentInChildren<Puzzle>().EndPuzzle(false); ;
+        ExitPuzzle();
+    }
+
+    public void ExitPuzzle()
+    {
+        transform.GetComponentInChildren<Puzzle>().EndPuzzle(false);
     }
 }

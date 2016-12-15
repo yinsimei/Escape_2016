@@ -14,8 +14,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
         public MouseLookMode mouseLookMode;
+
+        // Mouse center
         public bool lockCursor = true;
+        public GameObject fakeCursor;
+
+        // Mouse Edge
         public float movingEdgeBoudary = 50f;
+
+        // variables for all modes
         public float XSensitivity = 2f;
         public float YSensitivity = 2f;
         public bool clampVerticalRotation = true;
@@ -42,6 +49,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 case MouseLookMode.MouseCenter:
                     {
+                        Cursor.visible = false;
+                        if (fakeCursor != null) fakeCursor.SetActive(true);
                         yRot = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
                         xRot = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;
                     }
@@ -49,8 +58,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 case MouseLookMode.MouseEdge:
                     {
-                        if (lockCursor)
-                            SetCursorLock(false);
+                        if (lockCursor) SetCursorLock(false);
+                        if (fakeCursor != null) fakeCursor.SetActive(false);
 
                         float yAxis = CrossPlatformInputManager.GetAxis("Mouse X") * XSensitivity;
                         float xAxis = CrossPlatformInputManager.GetAxis("Mouse Y") * YSensitivity;

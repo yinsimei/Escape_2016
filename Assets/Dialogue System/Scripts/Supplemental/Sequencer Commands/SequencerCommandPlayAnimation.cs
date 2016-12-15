@@ -12,11 +12,7 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
         {
             string objectTag = GetParameter(0);
             string animationName = GetParameter(1);
-            string speedStr = GetParameter(2);
-            float animationSpeed = 1f;
-
-            if (!string.IsNullOrEmpty(speedStr))
-                animationSpeed = float.Parse(speedStr);
+            float animationSpeed = GetParameterAsFloat(2);
 
             if (string.IsNullOrEmpty(objectTag))
                 objectTag = "Player";
@@ -28,6 +24,13 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                 Stop();
             }
 
+            if (string.IsNullOrEmpty(animationName))
+            {
+                Debug.LogError("Non animation name entered " + objectTag);
+                Stop();
+            }
+
+            
             Animation anim = obj.GetComponent<Animation>();
             if (anim == null)
             {
@@ -35,20 +38,21 @@ namespace PixelCrushers.DialogueSystem.SequencerCommands
                 Stop();
             }
 
-            if (string.IsNullOrEmpty(animationName))
-            {
-                anim[""].speed = animationSpeed;
-                anim.Play();
-            }
-            else
-            {
-                anim[animationName].speed = animationSpeed;
-                anim.Play(animationName);
-            }
+            StartCoroutine(StartAnimation(anim, animationName, animationSpeed));
 
             Stop();
         }
 
+        IEnumerator StartAnimation(Animation p_anim, string p_sAnimName, float p_fSpeed)
+        {
+            p_anim[p_sAnimName].speed = p_fSpeed;
+            p_anim.Play(p_sAnimName);
+            do
+            {
+                yield return null;
+            } while (p_anim.IsPlaying(p_sAnimName));
+            DialogueManager.Instance.gameObject.BroadcastMessage("OnConversationEnd", this.transform);
+        }
     }
 
 }

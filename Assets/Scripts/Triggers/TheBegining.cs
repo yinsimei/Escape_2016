@@ -22,8 +22,9 @@ public class TheBegining : MonoBehaviour {
             do
             {
                 yield return null;
-            } while (anim.IsPlaying("TheBeginning_GetUp"));
-            
+            } while (anim.isPlaying);
+
+            // Start monologue
             DialogueManager.StartConversation("TheBeginning");
             Destroy(this.gameObject);
         }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using PixelCrushers.DialogueSystem;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Raycaster : MonoBehaviour {
 
@@ -11,8 +12,8 @@ public class Raycaster : MonoBehaviour {
     private RaycastReceiver m_raycastReceiver = null;
 
     // Use this for initialization
-    void Start () {
-	
+    void Start ()
+    {
 	}
 	
 	// Update is called once per frame
@@ -20,7 +21,33 @@ public class Raycaster : MonoBehaviour {
     {
         bool foundRaycastReceiver = false;
         RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Vector3 position = Vector3.zero;
+        switch (transform.GetComponent<RigidbodyFirstPersonController>().mouseLook.mouseLookMode)
+        {
+            case MouseLook.MouseLookMode.MouseCenter:
+                {
+                    position = Input.mousePosition;
+                }
+                break;
+
+            case MouseLook.MouseLookMode.MouseEdge:
+                {
+                    position = Camera.main.transform.position;
+                    // the two values are the same
+                    //position = new Vector3((float)Screen.width / 2f, (float)Screen.height / 2f, 0f);
+                }
+                break;
+
+            default:
+                {
+                    Debug.LogError("Mouselook mode undefined ! ");
+                }
+                break;
+        }
+            
+
+        Ray ray = Camera.main.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out hit, maxDistance))
         {
             if (hit.collider != null)

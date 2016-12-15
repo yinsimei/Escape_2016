@@ -134,6 +134,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jump = true;
             }
+
+            PreventStuckInWall();
         }
 
 
@@ -197,9 +199,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void StickToGroundHelper()
         {
             RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
-                                   ((m_Capsule.height/2f) - m_Capsule.radius) +
-                                   advancedSettings.stickToGroundHelperDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.SphereCast(transform.position, 
+                m_Capsule.radius * (1.0f - advancedSettings.shellOffset), 
+                Vector3.down, out hitInfo,
+                ((m_Capsule.height/2f) - m_Capsule.radius) +
+                advancedSettings.stickToGroundHelperDistance,
+                Physics.AllLayers, 
+                QueryTriggerInteraction.Ignore))
             {
                 if (Mathf.Abs(Vector3.Angle(hitInfo.normal, Vector3.up)) < 85f)
                 {
@@ -245,8 +251,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_PreviouslyGrounded = m_IsGrounded;
             RaycastHit hitInfo;
-            if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
-                                   ((m_Capsule.height/2f) - m_Capsule.radius) + advancedSettings.groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset),
+                Vector3.down, 
+                out hitInfo,
+                ((m_Capsule.height/2f) - m_Capsule.radius) + advancedSettings.groundCheckDistance, 
+                Physics.AllLayers, QueryTriggerInteraction.Ignore))
             {
                 m_IsGrounded = true;
                 m_GroundContactNormal = hitInfo.normal;
@@ -259,6 +268,26 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if (!m_PreviouslyGrounded && m_IsGrounded && m_Jumping)
             {
                 m_Jumping = false;
+            }
+        }
+
+        private void PreventStuckInWall()
+        {
+            // Get the velocity
+            Vector3 horizontalMove = m_RigidBody.velocity;
+            // Don't use the vertical velocity
+            horizontalMove.y = 0;
+            // Calculate the approximate distance that will be traversed
+            float distance = horizontalMove.magnitude * Time.fixedDeltaTime;
+            // Normalize horizontalMove since it should be used to indicate direction
+            horizontalMove.Normalize();
+            RaycastHit hit;
+
+            // Check if the body's current velocity will result in a collision
+            if (m_RigidBody.SweepTest(horizontalMove, out hit, distance))
+            {
+                // If so, stop the movement
+                m_RigidBody.velocity = new Vector3(0, 0, 0);
             }
         }
     }

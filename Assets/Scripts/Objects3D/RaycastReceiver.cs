@@ -10,7 +10,8 @@ public class RaycastReceiver : MonoBehaviour {
     {
         None,
         Highlight,
-        Blink
+        Blink,
+        CallAttention
     }
 
     public float reactionDistance = 3f;
@@ -43,7 +44,7 @@ public class RaycastReceiver : MonoBehaviour {
     // Use this for initialization
     virtual protected void Start ()
     {
-        Assert.IsNotNull(GetComponent<Collider>(), "The raycast receiver should have a collider!");
+        Assert.IsNotNull(GetComponent<Collider>(), name + " should have a collider as raycast receiver!");
         foreach (Material m in GetComponent<Renderer>().materials)
         {
             m_materialInfos.Add(new SMaterialInfo(m));
@@ -60,7 +61,7 @@ public class RaycastReceiver : MonoBehaviour {
         return interactive;
     }
 
-    private void SetHighlightState(EHighlightState newState)
+    protected void SetHighlightState(EHighlightState newState)
     {
         switch(newState)
         {
@@ -110,7 +111,7 @@ public class RaycastReceiver : MonoBehaviour {
     }
 
     // Update is called once per frame
-    protected void Update ()
+    virtual protected void Update ()
     {
         HighlightAnimation();
     }
@@ -122,20 +123,20 @@ public class RaycastReceiver : MonoBehaviour {
 
     protected void HighlightAnimation()
     {
-        if (m_highlightState == EHighlightState.None)
-            return;
-
-        if (m_highlightState == EHighlightState.Blink)
+        if (m_highlightState == EHighlightState.Blink || m_highlightState == EHighlightState.CallAttention)
         {
+
             float blinkSpeed = 2f;
-            float emission = Mathf.PingPong(Time.time, 1.0f/blinkSpeed);
+            float emission = Mathf.PingPong(Time.time, 1.0f / blinkSpeed);
+            float actualLightness = (m_highlightState == EHighlightState.CallAttention) ? lightness * 2f : lightness;
             Color baseColor = Color.grey;
-            Color finalColor = baseColor * Mathf.LinearToGammaSpace(emission * blinkSpeed * lightness * 0.8f + lightness * 0.2f);
+            Color finalColor = baseColor * Mathf.LinearToGammaSpace(emission * blinkSpeed * actualLightness * 0.8f + actualLightness * 0.2f);
 
             foreach (SMaterialInfo sm in m_materialInfos)
             {
                 sm.m_material.SetColor("_EmissionColor", finalColor);
             }
         }
+
     }
 }

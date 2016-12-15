@@ -17,7 +17,7 @@ public class InteractiveObjectParent : RaycastReceiverParent
         {
             if (unlockAction != null)
             {
-                StartCoroutine(unlockAction.StartAction());
+                unlockAction.StartAction();
             }
         }
     }

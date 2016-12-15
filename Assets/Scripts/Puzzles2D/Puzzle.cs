@@ -36,7 +36,7 @@ public class Puzzle : MonoBehaviour {
     virtual public void StartPuzzle()
     {
         // Broadcast
-        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleStart", gameObject, SendMessageOptions.DontRequireReceiver);
+        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleStart", this.transform);
         // Show puzzle panel
         transform.GetComponentInParent<PuzzlesPanel>().BeginFadeIn();
         // Set this puzzle to current puzzle
@@ -88,7 +88,7 @@ public class Puzzle : MonoBehaviour {
         SetCurrentPuzzle(false);
 
         // Broadcast
-        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleEnd", gameObject, SendMessageOptions.DontRequireReceiver);
+        DialogueManager.Instance.gameObject.BroadcastMessage("OnPuzzleEnd", this.transform);
     }
 
     // Set this puzzle to current puzzle on panel

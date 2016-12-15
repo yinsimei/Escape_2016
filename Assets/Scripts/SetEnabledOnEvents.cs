@@ -5,12 +5,14 @@ using UnityEngine.Assertions;
 
 public class SetEnabledOnEvents : MonoBehaviour {
 
-    public MonoBehaviour[] UIBehaviors;           // Icon button behavoirs
+    public MonoBehaviour[] UIBehaviors;          // Icon button behavoirs
     public MonoBehaviour[] playerBehaviors;      // Player behaviors : raycast, mouselook, keyboard behaviors for UI, ...
 
     private bool m_bDialogue;  // When Dialogue, freeze all else
     private bool m_bUI;        // When UI, don't freeze Dialogue
-    
+
+    private CursorLockMode m_eCursorOldState;
+
     void Start ()
     {
         m_bDialogue = false;
@@ -23,6 +25,9 @@ public class SetEnabledOnEvents : MonoBehaviour {
         m_bDialogue = true;
         SetPlayerBehaviors(false);
         SetUIBehaviors(false);
+
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_InConversation);
     }
 
     public void OnConversationEnd(Transform actor)
@@ -30,6 +35,9 @@ public class SetEnabledOnEvents : MonoBehaviour {
         m_bDialogue = false;
         SetPlayerBehaviors(true);
         SetUIBehaviors(true);
+
+        // Set UI Controller State
+        UIController.instance.GoBackState();
     }
 
     public void OnUIShow()
@@ -41,6 +49,9 @@ public class SetEnabledOnEvents : MonoBehaviour {
 
         m_bUI = true;
         SetPlayerBehaviors(false);
+
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_UI);
     }
 
     public void OnUIHide()
@@ -51,6 +62,9 @@ public class SetEnabledOnEvents : MonoBehaviour {
         {
             SetPlayerBehaviors(true);
         }
+
+        // Set UI Controller State
+        UIController.instance.GoBackState();
     }
 
     public void OnInventoryShow()
@@ -60,12 +74,18 @@ public class SetEnabledOnEvents : MonoBehaviour {
 
         SetPlayerBehaviors(false);
         SetUIBehaviors(false);
+
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_InventoryBar);
     }
 
     public void OnInventoryHide()
     {
         SetPlayerBehaviors(true);
         SetUIBehaviors(true);
+
+        // Set UI Controller State
+        UIController.instance.GoBackState();
     }
 
     public void OnPuzzleStart()
@@ -75,10 +95,37 @@ public class SetEnabledOnEvents : MonoBehaviour {
 
         SetPlayerBehaviors(false);
         SetUIBehaviors(false);
+
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_InPuzzle);
     }
 
     public void OnPuzzleEnd()
     {
+        SetPlayerBehaviors(true);
+        SetUIBehaviors(true);
+
+        // Set UI Controller State
+        UIController.instance.GoBackState();
+    }
+
+    public void OnDocumentStart()
+    {
+        SetPlayerBehaviors(false);
+        SetUIBehaviors(false);
+
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_ReadingDoc);
+    }
+
+    public void OnDocumentEnd()
+    {
+        // Set UI Controller State
+        UIController.instance.GoBackState();
+
+        if (m_bUI)
+            return;
+
         SetPlayerBehaviors(true);
         SetUIBehaviors(true);
     }
@@ -88,6 +135,18 @@ public class SetEnabledOnEvents : MonoBehaviour {
         foreach (MonoBehaviour m in playerBehaviors)
         {
             m.enabled = enabled;
+        }
+
+        // Change Cursor
+        Cursor.visible = !enabled;
+        if (Cursor.visible)
+        {
+            m_eCursorOldState = Cursor.lockState;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = m_eCursorOldState;
         }
     }
 

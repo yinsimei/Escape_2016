@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 05a1f7232f0340c47a19058f0d2361be
+timeCreated: 1481470028
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 32
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Nokian
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

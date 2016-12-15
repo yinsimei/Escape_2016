@@ -4,8 +4,10 @@ using UnityEngine.Assertions;
 
 public class InteractiveObject : RaycastReceiver
 {
-    public string triggerNameWhenClick = "Open";
+    public AudioSource openSound;
+    public AudioSource closeSound;
 
+    private bool m_bOpen = false;
     override public void ClickAction()
     {
         UnlockAction unlockAction = transform.GetComponent<UnlockAction>();
@@ -17,7 +19,7 @@ public class InteractiveObject : RaycastReceiver
         {
             if (unlockAction != null)
             {
-                StartCoroutine(unlockAction.StartAction());
+                unlockAction.StartAction();
             }
         }
     }
@@ -25,10 +27,21 @@ public class InteractiveObject : RaycastReceiver
     public void ClickAnimation()
     {
         Animator animator = gameObject.GetComponent<Animator>();
-        if (animator != null && !string.IsNullOrEmpty(triggerNameWhenClick))
+        if (animator != null)
         {
-            bool trigger = animator.GetBool(triggerNameWhenClick);
-            animator.SetBool(triggerNameWhenClick, !trigger);
+            m_bOpen = !m_bOpen;
+            if (m_bOpen)
+            {
+                animator.SetTrigger("Open");
+                if (openSound != null)
+                    openSound.Play();
+            }
+            else
+            {
+                animator.SetTrigger("Close");
+                if (closeSound != null)
+                    closeSound.Play();
+            }
         }
     }
 }

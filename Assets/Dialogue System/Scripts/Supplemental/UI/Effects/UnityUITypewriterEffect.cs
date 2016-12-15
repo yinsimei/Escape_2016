@@ -170,14 +170,16 @@ namespace PixelCrushers.DialogueSystem
 			if (!IsPlaying && started && gameObject.activeInHierarchy)
             {
 				StopAllCoroutines();
-				StartCoroutine(Play());
+                if (control == null) control = GetComponent<UnityEngine.UI.Text>();
+                StartCoroutine(Play());
 			}
 		}
 		
 		public void OnDisable()
         {
 			Stop();
-		}
+            control = null;
+        }
 		
 		/// <summary>
 		/// Pauses the effect.

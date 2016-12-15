@@ -8,7 +8,7 @@ public class CollectableObject : RaycastReceiver
         CollectAction collectAction = transform.GetComponent<CollectAction>();
         if (collectAction != null)
         {
-            StartCoroutine(collectAction.StartAction());
+            collectAction.StartAction();
         }
     }
 }
