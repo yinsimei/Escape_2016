@@ -290,5 +290,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_RigidBody.velocity = new Vector3(0, 0, 0);
             }
         }
+
+        /// hide fake cursor when disabled
+        private bool m_bOldFakeCursor;
+
+        private void OnEnable()
+        {
+            m_bOldFakeCursor = mouseLook.fakeCursor.activeSelf;
+            mouseLook.fakeCursor.SetActive(false);
+        }
+
+        private void OnDisable()
+        {
+            mouseLook.fakeCursor.SetActive(m_bOldFakeCursor);
+        }
     }
 }

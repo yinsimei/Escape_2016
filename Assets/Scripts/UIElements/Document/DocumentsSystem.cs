@@ -32,5 +32,8 @@ public class DocumentsSystem : MonoBehaviour {
 
         // Run hide animation
         GetComponent<Animator>().SetTrigger("Hide");
+
+        // Set all toggles to false
+        transform.GetComponentInChildren<UnityEngine.UI.ToggleGroup>().SetAllTogglesOff();
     }
 }

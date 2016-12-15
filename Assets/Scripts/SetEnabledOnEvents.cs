@@ -123,11 +123,12 @@ public class SetEnabledOnEvents : MonoBehaviour {
         // Set UI Controller State
         UIController.instance.GoBackState();
 
+        SetUIBehaviors(true);
+
         if (m_bUI)
             return;
-
         SetPlayerBehaviors(true);
-        SetUIBehaviors(true);
+       
     }
 
     private void SetPlayerBehaviors(bool enabled)

@@ -17,6 +17,7 @@ public class RaycastReceiver : MonoBehaviour {
     public float reactionDistance = 3f;
     public bool interactive = true;
     public float lightness = 0.1f; // between 0 and 1
+    public bool ignoreParent = false;
 
     [HideInInspector]
     public bool IsClickable

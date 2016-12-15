@@ -99,7 +99,7 @@ public class Raycaster : MonoBehaviour {
         {
             if (m_raycastReceiver.IsClickable)
             {
-                if (m_raycastReceiver.receiverParent != null)
+                if (m_raycastReceiver.receiverParent != null && !m_raycastReceiver.ignoreParent)
                 {
                     m_raycastReceiver.receiverParent.ClickActionParent();
                 }
@@ -120,7 +120,7 @@ public class Raycaster : MonoBehaviour {
 
     private void RayHitTarget(float distance)
     {
-        if (m_raycastReceiver.receiverParent != null)
+        if (m_raycastReceiver.receiverParent != null && !m_raycastReceiver.ignoreParent)
         {
             m_raycastReceiver.receiverParent.OnRayHitParent(distance);
         }
@@ -134,7 +134,7 @@ public class Raycaster : MonoBehaviour {
     {
         if (m_raycastReceiver != null)
         {
-            if (m_raycastReceiver.receiverParent != null)
+            if (m_raycastReceiver.receiverParent != null && !m_raycastReceiver.ignoreParent)
             {
                 if (newReceiver != null && oldReceiver.transform.parent.Equals(newReceiver.transform.parent))
                 {
