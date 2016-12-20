@@ -11,8 +11,6 @@ public class SetEnabledOnEvents : MonoBehaviour {
     private bool m_bDialogue;  // When Dialogue, freeze all else
     private bool m_bUI;        // When UI, don't freeze Dialogue
 
-    private CursorLockMode m_eCursorOldState;
-
     void Start ()
     {
         m_bDialogue = false;
@@ -136,18 +134,6 @@ public class SetEnabledOnEvents : MonoBehaviour {
         foreach (MonoBehaviour m in playerBehaviors)
         {
             m.enabled = enabled;
-        }
-
-        // Change Cursor
-        Cursor.visible = !enabled;
-        if (Cursor.visible)
-        {
-            m_eCursorOldState = Cursor.lockState;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = m_eCursorOldState;
         }
     }
 

@@ -9,6 +9,7 @@ public class UnlockAction : MonoBehaviour
     public string conversationWhenLocked;
     public InventoryItem unlockItem;
     public string dialogueVar;
+    public AudioSource unlockSound;
 
     private Inventory m_inventory;
 
@@ -60,5 +61,10 @@ public class UnlockAction : MonoBehaviour
     {
         Assert.IsTrue(isLocked);
         isLocked = false;
+
+        if (unlockSound != null)
+        {
+            unlockSound.Play();
+        }
     }
 }

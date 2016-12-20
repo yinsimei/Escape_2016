@@ -83,7 +83,8 @@ public class UIController : MonoBehaviour {
     public void SetState(EControllerState p_newState)
     {
         Assert.AreNotEqual(p_newState, EControllerState.e_InGame, "Push error : In game state should always be at the bottom");
-        m_eStateStack.Push(p_newState);
+        if (!m_eStateStack.Contains(p_newState))
+            m_eStateStack.Push(p_newState);
     }
 
     public void GoBackState()

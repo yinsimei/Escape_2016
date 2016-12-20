@@ -25,17 +25,15 @@ public class Raycaster : MonoBehaviour {
         Vector3 position = Vector3.zero;
         switch (transform.GetComponent<RigidbodyFirstPersonController>().mouseLook.mouseLookMode)
         {
-            case MouseLook.MouseLookMode.MouseCenter:
+            case MouseLook.MouseLookMode.MouseEdge:
                 {
                     position = Input.mousePosition;
                 }
                 break;
 
-            case MouseLook.MouseLookMode.MouseEdge:
+            case MouseLook.MouseLookMode.MouseCenter:
                 {
-                    position = Camera.main.transform.position;
-                    // the two values are the same
-                    //position = new Vector3((float)Screen.width / 2f, (float)Screen.height / 2f, 0f);
+                    position = new Vector3((float)Screen.width / 2f, (float)Screen.height / 2f, 0f);
                 }
                 break;
 

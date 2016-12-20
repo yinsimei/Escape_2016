@@ -298,11 +298,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_bOldFakeCursor = mouseLook.fakeCursor.activeSelf;
             mouseLook.fakeCursor.SetActive(false);
+
+            // Change Cursor
+            mouseLook.SetCursorLock(true);
         }
 
         private void OnDisable()
         {
-            mouseLook.fakeCursor.SetActive(m_bOldFakeCursor);
+            // Change Cursor
+            mouseLook.SetCursorLock(false);
+            if (mouseLook.fakeCursor != null)
+            {
+                mouseLook.fakeCursor.SetActive(m_bOldFakeCursor);
+            }
         }
     }
 }

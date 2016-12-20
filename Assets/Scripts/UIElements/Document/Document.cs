@@ -81,6 +81,10 @@ public class Document : MonoBehaviour, IPointerClickHandler
         m_nCurrentPage = 0;
         pages[m_nCurrentPage].GetComponent<Animator>().SetTrigger("Show");
         buttonLastPage.SetActive(false);
+        if (pages.Length > 1)
+        {
+            buttonNextPage.SetActive(true);
+        }
 
         // Broadcast
         DialogueManager.Instance.gameObject.BroadcastMessage("OnDocumentStart", this.transform);

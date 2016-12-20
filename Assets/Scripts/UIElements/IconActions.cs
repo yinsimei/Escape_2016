@@ -55,7 +55,7 @@ public class IconActions : MonoBehaviour {
     {
         Assert.IsFalse(m_bShown);
         m_bShown = true;
-
+        
         for (int i = 0; i < transform.childCount; ++i)
         {
             Transform icon = transform.GetChild(i);
@@ -114,6 +114,9 @@ public class IconActions : MonoBehaviour {
 
     public void ClickInventory()
     {
+        // Play sound
+        SoundManager.instance.Play("collectSound");
+
         // Hide document panel
         documentSystem.Hide();
 
@@ -123,6 +126,9 @@ public class IconActions : MonoBehaviour {
 
     public void ClickDocs()
     {
+        // Play sound
+        SoundManager.instance.Play("collectPaper");
+
         // Hide inventory panel
         craftingSystem.Hide();
 
