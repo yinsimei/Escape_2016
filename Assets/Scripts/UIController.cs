@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
-public class UIController : MonoBehaviour {
+public class UIController : MonoBehaviour
+{
 
     public static UIController instance;
 
@@ -14,13 +15,14 @@ public class UIController : MonoBehaviour {
         e_InConversation,
         e_ReadingDoc,
         e_InPuzzle,
-        e_InventoryBar
+        e_InventoryBar, 
+        e_GameMenu
     }
 
-    private Stack<EControllerState> m_eStateStack =  new Stack<EControllerState>();
+    private Stack<EControllerState> m_eStateStack = new Stack<EControllerState>();
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         Assert.IsNull(instance);
         instance = this;
@@ -33,7 +35,7 @@ public class UIController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            switch(m_eStateStack.Peek())
+            switch (m_eStateStack.Peek())
             {
                 case EControllerState.e_InGame:
                     {
@@ -68,6 +70,12 @@ public class UIController : MonoBehaviour {
                 case EControllerState.e_InPuzzle:
                     {
                         PuzzlesPanel.instance.ExitPuzzle();
+                        break;
+                    }
+
+                case EControllerState.e_GameMenu:
+                    {
+                        GameMenu.instance.Hide();
                         break;
                     }
 

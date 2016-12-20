@@ -129,6 +129,18 @@ public class SetEnabledOnEvents : MonoBehaviour {
        
     }
 
+    public void OnGameMenuShow()
+    {
+        // Set UI Controller State
+        UIController.instance.SetState(UIController.EControllerState.e_GameMenu);
+    }
+
+    public void OnGameMenuHide()
+    {
+        // Set UI Controller State
+        UIController.instance.GoBackState();
+    }
+
     private void SetPlayerBehaviors(bool enabled)
     {
         foreach (MonoBehaviour m in playerBehaviors)

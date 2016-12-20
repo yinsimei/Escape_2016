@@ -10,6 +10,7 @@ public class IconActions : MonoBehaviour {
     public float transitionTime;
     public CraftingSystem craftingSystem;
     public DocumentsSystem documentSystem;
+    public GameMenu gameMenu;
 
     [HideInInspector]
     public bool m_bShown = false;
@@ -138,23 +139,18 @@ public class IconActions : MonoBehaviour {
 
     public void ClickMenu()
     {
-        // To call game menu
+        gameMenu.Show();
     }
 
     private void ShowIcon(Transform icon, bool show = true)
     {
         Animator animatorIcon = icon.GetComponent<Animator>();
-        CanvasGroup canvasGroupIcon = icon.GetComponent<CanvasGroup>();
         if (show)
         {
-            if (canvasGroupIcon.alpha != 0f)
-                Debug.LogError("Icon " + icon.name + " already shown");
             animatorIcon.SetTrigger("Show");
         }
         else
         {
-            if (canvasGroupIcon.alpha != 1f)
-                Debug.LogError("Icon " + icon.name + " already hidden");
             animatorIcon.SetTrigger("Hide");
         }
     }
