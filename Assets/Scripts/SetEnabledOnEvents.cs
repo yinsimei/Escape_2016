@@ -25,7 +25,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(false);
 
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_InConversation);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_InConversation);
     }
 
     public void OnConversationEnd(Transform actor)
@@ -35,7 +35,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(true);
 
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
     }
 
     public void OnUIShow()
@@ -49,7 +49,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetPlayerBehaviors(false);
 
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_UI);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_UI);
     }
 
     public void OnUIHide()
@@ -62,7 +62,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         }
 
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
     }
 
     public void OnInventoryShow()
@@ -74,7 +74,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(false);
 
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_InventoryBar);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_InventoryBar);
     }
 
     public void OnInventoryHide()
@@ -83,7 +83,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(true);
 
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
     }
 
     public void OnPuzzleStart()
@@ -95,7 +95,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(false);
 
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_InPuzzle);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_InPuzzle);
     }
 
     public void OnPuzzleEnd()
@@ -104,7 +104,7 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(true);
 
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
     }
 
     public void OnDocumentStart()
@@ -113,13 +113,13 @@ public class SetEnabledOnEvents : MonoBehaviour {
         SetUIBehaviors(false);
 
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_ReadingDoc);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_ReadingDoc);
     }
 
     public void OnDocumentEnd()
     {
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
 
         SetUIBehaviors(true);
 
@@ -132,13 +132,13 @@ public class SetEnabledOnEvents : MonoBehaviour {
     public void OnGameMenuShow()
     {
         // Set UI Controller State
-        UIController.instance.SetState(UIController.EControllerState.e_GameMenu);
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_GameMenu);
     }
 
     public void OnGameMenuHide()
     {
         // Set UI Controller State
-        UIController.instance.GoBackState();
+        KeyboardController.instance.GoBackState();
     }
 
     private void SetPlayerBehaviors(bool enabled)

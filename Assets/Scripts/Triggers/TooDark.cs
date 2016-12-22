@@ -9,7 +9,7 @@ public class TooDark : MonoBehaviour {
 
     IEnumerator OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !FlashLight.instance.IsOn)
         {
             // Start Monologue
             DialogueManager.StartConversation("TooDark");

@@ -5,15 +5,16 @@ using PixelCrushers.DialogueSystem;
 
 public class RuntimeDialogueUIChange : MonoBehaviour
 {
-    public GameObject npcDialoguePanel;
+    public GameObject npcSubtitleLine;
+    public UnityUIContinueButtonFastForward npcContinuousButton;
     public UnityUIDialogueUI dialogueUI;
 
     void SetTextToCenter(string p_bTrue)
     {
         if (p_bTrue.Equals("true"))
-            npcDialoguePanel.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
+            npcSubtitleLine.GetComponent<Text>().alignment = TextAnchor.MiddleCenter;
         else
-            npcDialoguePanel.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
+            npcSubtitleLine.GetComponent<Text>().alignment = TextAnchor.UpperLeft;
     }
 
     void SetNpcAlwaysVisible(string p_bVisible)
@@ -25,12 +26,14 @@ public class RuntimeDialogueUIChange : MonoBehaviour
     {
         if (p_bTrue.Equals("true"))
         {
-            UnityUITypewriterEffect effect = npcDialoguePanel.AddComponent<UnityUITypewriterEffect>();
+            UnityUITypewriterEffect effect = npcSubtitleLine.AddComponent<UnityUITypewriterEffect>();
+            npcContinuousButton.typewriterEffect = effect;
             effect.charactersPerSecond = 20;
         }  
         else
         {
-            Destroy(npcDialoguePanel.GetComponent<UnityUITypewriterEffect>());
+            npcContinuousButton.typewriterEffect = null;
+            Destroy(npcSubtitleLine.GetComponent<UnityUITypewriterEffect>());
         }
     }
 }
