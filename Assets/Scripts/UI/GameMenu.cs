@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using PixelCrushers.DialogueSystem;
+using UnityEngine.SceneManagement;
 
 public class GameMenu : MonoBehaviour, IPointerClickHandler
 {
@@ -36,7 +37,7 @@ public class GameMenu : MonoBehaviour, IPointerClickHandler
 
     public void ExitGame()
     {
-        Application.Quit();
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void OnPointerClick(PointerEventData eventData)

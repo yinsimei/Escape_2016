@@ -134,8 +134,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jump = true;
             }
-
-            PreventStuckInWall();
         }
 
 
@@ -271,26 +269,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
         }
 
-        private void PreventStuckInWall()
-        {
-            // Get the velocity
-            Vector3 horizontalMove = m_RigidBody.velocity;
-            // Don't use the vertical velocity
-            horizontalMove.y = 0;
-            // Calculate the approximate distance that will be traversed
-            float distance = horizontalMove.magnitude * Time.fixedDeltaTime;
-            // Normalize horizontalMove since it should be used to indicate direction
-            horizontalMove.Normalize();
-            RaycastHit hit;
-
-            // Check if the body's current velocity will result in a collision
-            if (m_RigidBody.SweepTest(horizontalMove, out hit, distance))
-            {
-                // If so, stop the movement
-                m_RigidBody.velocity = new Vector3(0, 0, 0);
-            }
-        }
-
         /// hide fake cursor when disabled
         private bool m_bOldFakeCursor;
 
@@ -311,6 +289,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 mouseLook.fakeCursor.SetActive(m_bOldFakeCursor);
             }
+
+            // Set velocity to zero
+            m_RigidBody.velocity = Vector3.zero;
         }
     }
 }

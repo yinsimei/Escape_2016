@@ -23,7 +23,7 @@ public class Puzzle_Jigsaw : Puzzle {
     public int m_UpLeftX_Pixel;
     public int m_UpLeftY_Pixel;
 
-    public GameObject[] m_pPuzzlePieces;
+    public PuzzlePiece_Jigsaw[] m_pPuzzlePieces;
 
     override protected void Start()
     {
@@ -31,11 +31,11 @@ public class Puzzle_Jigsaw : Puzzle {
         int NbCells = m_NbLines * m_NbColumns;
 
         // create cells for game board
-        foreach (GameObject puzzle in m_pPuzzlePieces)
+        foreach (PuzzlePiece_Jigsaw piece in m_pPuzzlePieces)
         {
-            puzzle.GetComponent<PuzzlePiece_Jigsaw>().m_GameBoard = gameObject;
+            piece.m_GameBoard = gameObject;
             if (m_PieceMode == PieceMode.EqualPieces)
-                puzzle.GetComponent<RectTransform>().sizeDelta = new Vector2(m_PuzzleWidth, m_PuzzleHeight);
+                piece.GetComponent<RectTransform>().sizeDelta = new Vector2(m_PuzzleWidth, m_PuzzleHeight);
         }
         
         // Create GridLayoutGroup to range cells
@@ -209,9 +209,9 @@ public class Puzzle_Jigsaw : Puzzle {
     // Check whether every pieces are in the right place
     private bool CheckPuzzleComplete()
     {
-        foreach (GameObject puzzle in m_pPuzzlePieces)
+        foreach (PuzzlePiece_Jigsaw piece in m_pPuzzlePieces)
         {
-            if (!puzzle.GetComponent<PuzzlePiece_Jigsaw>().CheckInRightPosition())
+            if (!piece.CheckInRightPosition())
                 return false;
         }
         return true;

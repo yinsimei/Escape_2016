@@ -33,8 +33,9 @@ public class SoundManager : MonoBehaviour
             m_pAudioSources.Add(source.soundName, source.audioSource);
     }
 
-    public void Play(string soundName)
+    public AudioSource Play(string soundName)
     {
         m_pAudioSources[soundName].Play();
+        return m_pAudioSources[soundName];
     }
 }

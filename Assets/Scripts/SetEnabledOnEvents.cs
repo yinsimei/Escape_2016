@@ -17,6 +17,24 @@ public class SetEnabledOnEvents : MonoBehaviour {
         m_bUI = false;
     }
 
+    public void OnEventAnimationStart(Transform actor)
+    {
+        SetPlayerBehaviors(false);
+        SetUIBehaviors(false);
+
+        // Set UI Controller State
+        KeyboardController.instance.SetState(KeyboardController.EControllerState.e_InConversation);
+    }
+
+    public void OnEventAnimationEnd(Transform actor)
+    {
+        SetPlayerBehaviors(true);
+        SetUIBehaviors(true);
+
+        // Set UI Controller State
+        KeyboardController.instance.GoBackState();
+    }
+
     public void OnConversationStart(Transform actor)
     {
         Assert.IsFalse(m_bUI);

@@ -10,11 +10,11 @@ public class TheBegining : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            DialogueManager.Instance.gameObject.BroadcastMessage("OnConversationStart", this.transform);
+            DialogueManager.Instance.gameObject.BroadcastMessage("OnEventAnimationStart", this.transform);
 
             // Animation black in
             Animator blackMaskAnimator = BlackInMask.GetComponent<Animator>();
-            blackMaskAnimator.Play("BlackIn");
+            blackMaskAnimator.SetTrigger("BlackIn");
 
             // Animation turn camera
             Animation anim = other.transform.GetComponent<Animation>();
@@ -23,6 +23,7 @@ public class TheBegining : MonoBehaviour {
             {
                 yield return null;
             } while (anim.isPlaying);
+            DialogueManager.Instance.gameObject.BroadcastMessage("OnEventAnimationEnd", this.transform);
 
             // Start monologue
             DialogueManager.StartConversation("TheBeginning");

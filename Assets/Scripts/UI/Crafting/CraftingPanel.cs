@@ -17,8 +17,10 @@ public class CraftingPanel : MonoBehaviour, IDropHandler {
 
     public void OnDrop(PointerEventData eventData)
     {
-        InventoryItem item = InventoryItem.ms_itemBeingDragged.GetComponent<InventoryItem>();
+        if (InventoryItem.ms_itemBeingDragged == null)
+            return;
 
+        InventoryItem item = InventoryItem.ms_itemBeingDragged.GetComponent<InventoryItem>();
         if (item == null)
             return;
 
