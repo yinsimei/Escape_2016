@@ -22,11 +22,8 @@ public class HorrorEffects : MonoBehaviour {
             // Start monologue
             DialogueManager.StartConversation("HorrorEffects");
 
-            // To be continued
-            GetComponent<ToBeContinued>().CloseScene();
-
             // Destroy the trigger
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
         }
     }
 }

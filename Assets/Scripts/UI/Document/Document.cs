@@ -80,6 +80,9 @@ public class Document : MonoBehaviour, IPointerClickHandler
         Assert.IsNull(currentDoc);
         currentDoc = this;
 
+        // Broadcast
+        DialogueManager.Instance.gameObject.BroadcastMessage("OnDocumentStart", this.transform);
+
         // Open Document
         GetComponent<Animator>().SetTrigger("Show");
 
@@ -92,20 +95,26 @@ public class Document : MonoBehaviour, IPointerClickHandler
         {
             buttonNextPage.SetActive(true);
         }
-
-        // Broadcast
-        DialogueManager.Instance.gameObject.BroadcastMessage("OnDocumentStart", this.transform);
     }
 
     public void CloseDocument()
     {
-        currentDoc = null;
+        StartCoroutine(CloseDoc());
+    }
 
+    private IEnumerator CloseDoc()
+    {
         // Close Document
         GetComponent<Animator>().SetTrigger("Hide");
 
         // Close Last Page
         pages[pages.Length - 1].GetComponent<Animator>().SetTrigger("Hide");
+
+        // Wait for end of animation
+        yield return new WaitForSeconds(GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+
+        // Set currentDoc to null
+        currentDoc = null;
 
         // Broadcast
         DialogueManager.Instance.gameObject.BroadcastMessage("OnDocumentEnd", this.transform);

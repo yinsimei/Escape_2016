@@ -279,6 +279,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             // Change Cursor
             mouseLook.SetCursorLock(true);
+
+            // Rigid Body
+            if (m_RigidBody != null)
+                m_RigidBody.useGravity = true;
         }
 
         private void OnDisable()
@@ -290,8 +294,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 mouseLook.fakeCursor.SetActive(m_bOldFakeCursor);
             }
 
-            // Set velocity to zero
+            // Rigid Body
             m_RigidBody.velocity = Vector3.zero;
+            m_RigidBody.useGravity = false;
         }
     }
 }

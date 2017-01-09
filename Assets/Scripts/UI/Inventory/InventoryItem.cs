@@ -158,7 +158,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IEndDragHandler, 
         }
         else
         {
-            DialogueManager.ShowAlert(itemName + " utilisé");
+            DialogueManager.ShowAlert(p_item.itemName + " utilisé");
             p_item.SetItemOutOfInventory();
             related3DObject.m_crafting.m_craftingText.UpdateCraftingText(this);
         }

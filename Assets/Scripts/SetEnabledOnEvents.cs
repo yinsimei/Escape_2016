@@ -144,7 +144,6 @@ public class SetEnabledOnEvents : MonoBehaviour {
         if (m_bUI)
             return;
         SetPlayerBehaviors(true);
-       
     }
 
     public void OnGameMenuShow()

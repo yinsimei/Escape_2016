@@ -104,6 +104,10 @@ public class KeyboardController : MonoBehaviour
 
     public void GoBackState()
     {
-        Assert.AreNotEqual(m_eStateStack.Pop(), EControllerState.e_InGame, "Pop error : In game state should always be at the bottom");
+        if (m_eStateStack.Pop() ==  EControllerState.e_InGame)
+        {
+            Debug.LogError("Pop error : In game state should always be at the bottom");
+            m_eStateStack.Push(EControllerState.e_InGame);
+        }
     }
 }
