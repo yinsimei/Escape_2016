@@ -7,6 +7,7 @@
 ### Simei YIN
 - Programming
 - Integrating
+
 ### Simon DUBOIS
 - Narrative
 - Graphic Art
