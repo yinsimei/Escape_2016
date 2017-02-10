@@ -6,7 +6,7 @@ All media resources (sound effects, images, 3D environment, ...) were found on t
 A gameplay demonstration : https://www.youtube.com/watch?v=lnSwbf05Kxs&index=3&list=PL8BNwwCeojJ5MDnWPpv-lB1OdrQIG3B7N
 
 ## Requirements
-Unity(version 5+)
+Unity (version 5+)
 
 ## Game features and relative scripts
 - [Interaction with 3D environment](./Assets/Scripts/Raycast/)
