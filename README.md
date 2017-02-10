@@ -10,10 +10,15 @@ Unity (version 5+)
 
 ## Game features and relative scripts
 - [Interaction with 3D environment](./Assets/Scripts/Raycast/)
+	1. Clickable objects blink when mouse is over
+	2. Click object to call dialogue/document/object animation/...
+	3. Event triggers
 - [2D puzzles](./Assets/Scripts/UI/Puzzles/)
-- [Inventory system](./Assets/Scripts/UI/Inventory/)
-- [Document system](./Assets/Scripts/UI/Document/)
-- [Crafting system](./Assets/Scripts/UI/Crafting/)
+	1. A jigsaw game
+	2. A master mind game to find out code 
+- [Inventory system](./Assets/Scripts/UI/Inventory/):  Show informations of found objects
+- [Document system](./Assets/Scripts/UI/Document/): Reread found documents
+- [Crafting system](./Assets/Scripts/UI/Crafting/): Combine objects
 
 ## Discussing
 Email: roseline.yin@gmail.com
